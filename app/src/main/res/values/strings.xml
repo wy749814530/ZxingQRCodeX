@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ZxingQRCodeX</string>
+    <string name="scode_title">扫描二维码</string>
+    <string name="qr_tt">选择添加</string>
+    <string name="scan_text">Please scan the device\'s QR code or barcode</string>
+    <string name="qr_light">手电筒</string>
+    <string name="qr_pic">相册</string>
+    <string name="unrecognized_QR">Unrecognized QR code or barcode</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">Confirm</string>
+    <string name="tip_title">Tip</string>
+    <string name="add_wifi_tip">Prompt</string>
+    <string name="add_camera_per">Please turn on camera permission in settings for normal use</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="put_code_in_the_box">Please place the QR code or barcode in the box.</string>
+    <string name="scan_code_recognition">Scan code recognition</string>
+</resources>
