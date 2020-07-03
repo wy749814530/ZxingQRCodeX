@@ -25,6 +25,8 @@ public class ScanQRcodeActivity extends BaseScanActivity {
         setTitle("二维码识别");
         //不显示右侧菜单
         setMenuVisibility(false);
+
+        setDescriptionText();
     }
 
 

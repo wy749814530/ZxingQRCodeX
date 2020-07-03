@@ -20,7 +20,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -413,7 +418,7 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
      *
      * @param imageRes
      */
-    public void setMenuImage(int imageRes) {
+    public void setMenuImage(@DrawableRes int imageRes) {
         tvRight.setCompoundDrawablesWithIntrinsicBounds(0, 0, imageRes, 0);
     }
 
@@ -424,6 +429,15 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
      */
     public void setDescriptionText(String text) {
         tvDescription.setText(text);
+    }
+
+    /**
+     * 设置底部描述配对图片
+     *
+     * @param imageRes
+     */
+    public void setDescriptionImage(@DrawableRes int imageRes) {
+        tvDescription.setCompoundDrawablesWithIntrinsicBounds(0, imageRes, 0, 0);
     }
 
     /**
