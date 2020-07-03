@@ -76,6 +76,11 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
     private List<String> pressionList = new ArrayList<>();
     private List<String> deniedPressionList = new ArrayList<>();
 
+    @DrawableRes
+    int flash_Colse = R.mipmap.add_scan_btn_colse;
+    @DrawableRes
+    int flash_Open = R.mipmap.add_scan_btn_opne;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -441,6 +446,31 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
     }
 
     /**
+     * 设置手电筒图片
+     *
+     * @param closeRes
+     * @param openRes
+     */
+    public void setFlashlightImage(@DrawableRes int closeRes, @DrawableRes int openRes) {
+        flash_Colse = closeRes;
+        flash_Open = openRes;
+        if (isOpen) {
+            ivFlashlight.setImageResource(flash_Colse);
+        } else {
+            ivFlashlight.setImageResource(flash_Open);
+        }
+    }
+
+    /**
+     * 设置手电筒图片
+     *
+     * @param imageRes
+     */
+    public void setPhotoAlbumImage(@DrawableRes int imageRes) {
+        ivPhotoAlbum.setImageResource(imageRes);
+    }
+
+    /**
      * 重启开启扫码
      */
     public void restartScanCode() {
@@ -476,11 +506,11 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
                 if (!isOpen) {
                     CodeUtils.isLightEnable(true);
                     isOpen = true;
-                    ivFlashlight.setImageResource(R.mipmap.add_scan_btn_colse);
+                    ivFlashlight.setImageResource(flash_Colse);
                 } else {
                     CodeUtils.isLightEnable(false);
                     isOpen = false;
-                    ivFlashlight.setImageResource(R.mipmap.add_scan_btn_opne);
+                    ivFlashlight.setImageResource(flash_Open);
                 }
             }
         } else if (i == R.id.iv_photo_album) {
