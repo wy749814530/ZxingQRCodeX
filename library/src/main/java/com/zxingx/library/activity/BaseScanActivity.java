@@ -12,23 +12,13 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.IntegerRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.RawRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.widget.FrameLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -38,22 +28,24 @@ import com.zxingx.library.decoding.CaptureActivityHandler;
 import com.zxingx.library.decoding.InactivityTimer;
 import com.zxingx.library.enumc.ScanFrequency;
 import com.zxingx.library.linstener.ImageAnalyzeLinstener;
-import com.zxingx.library.linstener.ScanQRcodeLinstener;
 import com.zxingx.library.linstener.ScanResultLinstener;
 import com.zxingx.library.utils.ImageUtil;
 import com.zxingx.library.view.ViewfinderView;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 /**
  * Created by Administrator on 2019/10/24 0024.
  */
 
-public abstract class BaseScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, ScanResultLinstener, View.OnClickListener {
-    private ScanQRcodeLinstener mLinstener;
+public abstract class BaseScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, ScanResultLinstener {
     private final int REQUEST_IMAGE = 112;
     private CaptureActivityHandler handler;
     private boolean hasSurface;
@@ -63,23 +55,13 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
     private SurfaceHolder surfaceHolder;
     private Camera camera;
     private boolean cameraIsShow = false;
+    private FrameLayout frameTopLay;
+    private FrameLayout frameBottomLay;
     private SurfaceView previewView;
     private ViewfinderView viewfinderView;
-    private ImageView ivFinder;
-    private ImageView ivBack;
-    private ImageView ivFlashlight;
-    private ImageView ivPhotoAlbum;
-    private TextView tvTitle;
-    private TextView tvRight;
-    private TextView tvDescription;
     private ScanFrequency mSpeed = ScanFrequency.MEDIUM_SPEED;
     private List<String> pressionList = new ArrayList<>();
     private List<String> deniedPressionList = new ArrayList<>();
-
-    @DrawableRes
-    int flash_Colse = R.mipmap.add_scan_btn_colse;
-    @DrawableRes
-    int flash_Open = R.mipmap.add_scan_btn_opne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,26 +82,11 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
     }
 
     private void initView() {
-
-        tvTitle = findViewById(R.id.tv_title);
-        tvRight = findViewById(R.id.tv_right);
-        tvDescription = findViewById(R.id.tv_description);
-
         previewView = findViewById(R.id.preview_view);
         viewfinderView = findViewById(R.id.viewfinder_view);
-        ivFinder = findViewById(R.id.iv_finder);
-        ivBack = findViewById(R.id.iv_back);
-        ivFlashlight = findViewById(R.id.iv_flashlight);
-        ivPhotoAlbum = findViewById(R.id.iv_photo_album);
-        Log.i("ScanActivity", "--- onCreate ---");
-
+        frameTopLay = findViewById(R.id.frame_top_lay);
+        frameBottomLay = findViewById(R.id.frame_bottom_lay);
         surfaceHolder = previewView.getHolder();
-
-
-        ivBack.setOnClickListener(this);
-        ivFlashlight.setOnClickListener(this);
-        ivPhotoAlbum.setOnClickListener(this);
-        tvRight.setOnClickListener(this);
     }
 
     @Override
@@ -392,85 +359,6 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
     }
 
     /**
-     * 设置title
-     *
-     * @param title
-     */
-    public void setTitle(String title) {
-        tvTitle.setText(title);
-    }
-
-    /**
-     * 设置是否显示右侧菜单栏
-     *
-     * @param visibility
-     */
-    public void setMenuVisibility(boolean visibility) {
-        tvRight.setVisibility(visibility ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * 设置右侧Menu
-     *
-     * @param text
-     */
-    public void setMenuText(String text) {
-        tvRight.setText(text);
-    }
-
-    /**
-     * 设置右侧menu图片
-     *
-     * @param imageRes
-     */
-    public void setMenuImage(@DrawableRes int imageRes) {
-        tvRight.setCompoundDrawablesWithIntrinsicBounds(0, 0, imageRes, 0);
-    }
-
-    /**
-     * 设置底部描述
-     *
-     * @param text
-     */
-    public void setDescriptionText(String text) {
-        tvDescription.setText(text);
-    }
-
-    /**
-     * 设置底部描述配对图片
-     *
-     * @param imageRes
-     */
-    public void setDescriptionImage(@DrawableRes int imageRes) {
-        tvDescription.setCompoundDrawablesWithIntrinsicBounds(0, imageRes, 0, 0);
-    }
-
-    /**
-     * 设置手电筒图片
-     *
-     * @param closeRes
-     * @param openRes
-     */
-    public void setFlashlightImage(@DrawableRes int closeRes, @DrawableRes int openRes) {
-        flash_Colse = closeRes;
-        flash_Open = openRes;
-        if (isOpen) {
-            ivFlashlight.setImageResource(flash_Colse);
-        } else {
-            ivFlashlight.setImageResource(flash_Open);
-        }
-    }
-
-    /**
-     * 设置手电筒图片
-     *
-     * @param imageRes
-     */
-    public void setPhotoAlbumImage(@DrawableRes int imageRes) {
-        ivPhotoAlbum.setImageResource(imageRes);
-    }
-
-    /**
      * 重启开启扫码
      */
     public void restartScanCode() {
@@ -495,38 +383,70 @@ public abstract class BaseScanActivity extends AppCompatActivity implements Surf
         mSpeed = speed;
     }
 
-    public boolean isOpen = false;
+    /**
+     * 开启或者关闭手电筒
+     *
+     * @param isOpen
+     * @return
+     */
+    public boolean openFlashlight(boolean isOpen) {
+        if (requestPermissionCamera()) {
+            if (isOpen) {
+                CodeUtils.isLightEnable(true);
+                return true;
+            } else {
+                CodeUtils.isLightEnable(false);
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.iv_back) {
-            finish();
-        } else if (i == R.id.iv_flashlight) {
-            if (requestPermissionCamera()) {
-                if (!isOpen) {
-                    CodeUtils.isLightEnable(true);
-                    isOpen = true;
-                    ivFlashlight.setImageResource(flash_Colse);
-                } else {
-                    CodeUtils.isLightEnable(false);
-                    isOpen = false;
-                    ivFlashlight.setImageResource(flash_Open);
-                }
-            }
-        } else if (i == R.id.iv_photo_album) {
-            if (requestPermissionReadExternal()) {
-                scanLocalPictures();
-            }
-        } else if (i == R.id.tv_right) {
-            onClickMenuItem();
+    /**
+     * 识别本地图片二维码
+     */
+    public void scanPictures() {
+        if (requestPermissionReadExternal()) {
+            scanLocalPictures();
         }
     }
+
+    /**
+     * 设置顶部布局
+     *
+     * @param view
+     */
+    protected void setTitleLay(View view) {
+        if (view == null) {
+            return;
+        }
+        frameTopLay.addView(view);
+    }
+
+    protected void setTitleLay(int id) {
+        frameTopLay.addView(LayoutInflater.from(this).inflate(id, null));
+    }
+
+    /**
+     * 设置底部布局
+     *
+     * @param view
+     */
+    protected void setBottomLay(View view) {
+        if (view == null) {
+            return;
+        }
+        frameBottomLay.addView(view);
+    }
+
+    protected void setBottomLay(int id) {
+        frameBottomLay.addView(LayoutInflater.from(this).inflate(id, null));
+    }
+
 
     protected abstract void onQrAnalyzeFailed();
 
     protected abstract void onQrAnalyzeSuccess(String result, Bitmap barcode);
-
-    protected abstract void onClickMenuItem();
 
     protected abstract void onDeniedPermission(String permission);
 }

@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zxingx.library.activity.BaseScanActivity;
 
@@ -17,25 +20,50 @@ import com.zxingx.library.activity.BaseScanActivity;
 
 public class ScanQRcodeActivity extends BaseScanActivity {
     private String TAG = ScanQRcodeActivity.class.getSimpleName();
+    private boolean flightIsOpen = false;
+    private TextView ivFlight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //设置标题
-        setTitle("二维码识别");
-        //不显示右侧菜单
-        setMenuVisibility(false);
+        setTitleLay(R.layout.qr_title_lay);
+        setBottomLay(R.layout.qr_bottom_lay);
+
+        findViewById(R.id.scan_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ivFlight = findViewById(R.id.iv_flight);
+        findViewById(R.id.iv_flight).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flightIsOpen) {
+                    flightIsOpen = false;
+                    openFlashlight(false);
+                    ivFlight.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.add_scan_btn_opne, 0, 0);
+                } else {
+                    flightIsOpen = true;
+                    openFlashlight(true);
+                    ivFlight.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.add_scan_btn_colse, 0, 0);
+                }
+            }
+        });
+
+        findViewById(R.id.qrcode_photo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanPictures();
+            }
+        });
     }
 
 
     @Override
     public void onQrAnalyzeFailed() {
         Log.i(TAG, "== 无法识别的二维码或条形码 ==");
-    }
-
-    @Override
-    public void onClickMenuItem() {
-        Log.i(TAG, "== onClickMenuItem ==");
     }
 
     @Override
